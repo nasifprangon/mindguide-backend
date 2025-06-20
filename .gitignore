@@ -1,0 +1,27 @@
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Ignore environment files
+.env
+.venv/
+venv/
+env/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore virtual environment folders
+*.pyc
+*.pyo
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore logs
+*.log
+
+# Node modules (if you ever add npm packages later)
+node_modules/

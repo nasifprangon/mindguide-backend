@@ -1,0 +1,291 @@
+{
+  "BetterHelp": {
+    "website": "https://www.betterhelp.com",
+    "contact": "See website contact page",
+    "price": "$70  to  $100  per week",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "grief",
+      "relationships"
+    ],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Calmerry": {
+    "website": "https://www.calmerry.com",
+    "contact": "team@calmerry.com",
+    "price": "$50/week",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Cerebral": {
+    "website": "https://www.cerebral.com",
+    "contact": "Not listed",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "CIMHS": {
+    "website": "https://www.cimhs.com",
+    "contact": "contact@cimhs.com",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "depression"
+    ],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Grow Therapy": {
+    "website": "https://www.growtherapy.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Online Therapy": {
+    "website": "https://www.online-therapy.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "OCD"
+    ],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "ReGain": {
+    "website": "https://www.regain.us",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Talkspace": {
+    "website": "https://www.talkspace.com",
+    "contact": "Not listed",
+    "price": "$15). If you pay out-of-pocket Talkspace therapy plans begin at $69/week",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Brightside": {
+    "website": "https://www.brightside.com",
+    "contact": "Not listed",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Talkiatry": {
+    "website": "https://www.talkiatry.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "relationships",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Monument": {
+    "website": "https://www.joinmonument.com",
+    "contact": "Not listed",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "relationships"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "TherapyDen": {
+    "website": "https://www.therapyden.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Open Path": {
+    "website": "https://www.openpathcollective.org",
+    "contact": "See website contact page",
+    "price": "$65 supports our nonprofit organization and allows thousands of people to access affordable\u00a0therapy each month",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Therapy for Black Girls": {
+    "website": "https://www.therapyforblackgirls.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety"
+    ],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Teen Counseling": {
+    "website": "https://www.teencounseling.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "relationships"
+    ],
+    "insurance": "Not mentioned",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "MDLive": {
+    "website": "https://www.mdlive.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Thriveworks": {
+    "website": "https://www.thriveworks.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Little Otter": {
+    "website": "https://www.littleotterhealth.com",
+    "contact": "help@littleotterhealth.com.",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "stress",
+      "PTSD",
+      "grief",
+      "relationships",
+      "LGBTQ",
+      "OCD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Yes"
+  },
+  "Dove Recovery": {
+    "website": "https://www.doverecovery.com",
+    "contact": "ray@doverecovery.com",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "relationships"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  },
+  "Zinnia Health": {
+    "website": "https://www.zinniahealth.com",
+    "contact": "See website contact page",
+    "price": "Not listed",
+    "platform_type": "Online therapy via website or app",
+    "specialties": [
+      "anxiety",
+      "depression",
+      "PTSD"
+    ],
+    "insurance": "Accepted",
+    "free_trial": "No",
+    "live_sessions": "Not mentioned"
+  }
+}

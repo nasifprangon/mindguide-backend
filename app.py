@@ -14,7 +14,12 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 with open("services_info.json") as f:
     SERVICE_INFO = json.load(f)
 
-REDDIT_DF = pd.read_csv("reddit_comments.csv")
+# Try to load reddit dataset
+try:
+    REDDIT_DF = pd.read_csv("reddit_comments.csv")
+except FileNotFoundError:
+    REDDIT_DF = None
+    print("⚠️ reddit_comments.csv not found. Reviews will be disabled.")
 
 app = Flask(__name__)
 CORS(app)
@@ -73,24 +78,27 @@ def chat():
 
         # Step 3: Handle reviews category
         elif classification == "reviews":
-            matched = None
-            for provider in REDDIT_DF["website"].unique():
-                if provider.lower() in prompt.lower():
-                    matched = provider
-                    break
-
-            if matched:
-                filtered = REDDIT_DF[REDDIT_DF["website"].str.lower() == matched.lower()]
-                top_reviews = filtered.sort_values("score", ascending=False).head(5)
-                prompt_text = "Summarize the following reviews:\n" + "\n".join(f"- {t}" for t in top_reviews["text"])
-
-                summary_response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role": "user", "content": prompt_text}]
-                )
-                reply = summary_response.choices[0].message.content.strip()
+            if REDDIT_DF is None:
+                reply = "Sorry, reviews are currently unavailable."
             else:
-                reply = "Sorry, I couldn't find reviews for that provider."
+                matched = None
+                for provider in REDDIT_DF["website"].unique():
+                    if provider.lower() in prompt.lower():
+                        matched = provider
+                        break
+
+                if matched:
+                    filtered = REDDIT_DF[REDDIT_DF["website"].str.lower() == matched.lower()]
+                    top_reviews = filtered.sort_values("score", ascending=False).head(5)
+                    prompt_text = "Summarize the following reviews:\n" + "\n".join(f"- {t}" for t in top_reviews["text"])
+
+                    summary_response = client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[{"role": "user", "content": prompt_text}]
+                    )
+                    reply = summary_response.choices[0].message.content.strip()
+                else:
+                    reply = "Sorry, I couldn't find reviews for that provider."
 
         # Step 4: Handle unknown category
         elif classification == "unknown":

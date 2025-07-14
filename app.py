@@ -5,6 +5,7 @@ import os
 import json
 import pandas as pd
 from dotenv import load_dotenv
+import time
 
 # Load API key from .env
 load_dotenv()
@@ -19,7 +20,7 @@ try:
     REDDIT_DF = pd.read_csv("reddit_comments.csv")
 except FileNotFoundError:
     REDDIT_DF = None
-    print("⚠️ reddit_comments.csv not found. Reviews will be disabled.")
+    print("reddit_comments.csv not found. Reviews will be disabled.")
 
 app = Flask(__name__)
 CORS(app)
@@ -28,12 +29,26 @@ CORS(app)
 def chat():
     data = request.get_json()
     prompt = data.get('prompt', '').strip()
+    mode = data.get('mode', 'llm_csv')
 
     if not prompt:
         return jsonify({'reply': 'No prompt provided.', 'category': None}), 400
 
     try:
-        # Step 1: Classify the prompt
+        if mode == 'llm_only':
+            start = time.time()
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            end = time.time()
+            return jsonify({
+                'reply': response.choices[0].message.content.strip(),
+                'category': 'llm_only',
+                'time': round(end - start, 2),
+                'tokens': response.usage.total_tokens
+            })
+
         system_msg = (
             "You are a classifier. Given a user's question, "
             "respond with one of the following categories:\n"
@@ -43,6 +58,7 @@ def chat():
             "Only reply with one word: info, reviews, or unknown."
         )
 
+        start = time.time()
         classification_response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -52,7 +68,6 @@ def chat():
         )
         classification = classification_response.choices[0].message.content.strip().lower()
 
-        # Step 2: Handle info category
         if classification == "info":
             matched = None
             for provider in SERVICE_INFO:
@@ -62,45 +77,75 @@ def chat():
 
             if matched:
                 info = SERVICE_INFO[matched]
-                reply = (
-                    f"**{matched} - Service Info**\n"
-                    f"- Website: {info.get('website', 'N/A')}\n"
-                    f"- Contact: {info.get('contact', 'N/A')}\n"
-                    f"- Price: {info.get('price', 'N/A')}\n"
-                    f"- Platform: {info.get('platform_type', 'N/A')}\n"
-                    f"- Specialties: {', '.join(info.get('specialties', []))}\n"
-                    f"- Insurance: {info.get('insurance', 'N/A')}\n"
-                    f"- Free Trial: {info.get('free_trial', 'N/A')}\n"
-                    f"- Live Sessions: {info.get('live_sessions', 'N/A')}"
+                info_prompt = (
+                    f"The user asked: '{prompt}'\n\n"
+                    f"Here is some data about the provider {matched}:\n"
+                    f"{json.dumps(info, indent=2)}\n\n"
+                    "Write a short summary in your own words that answers the user's query. "
+                    "Avoid repeating field names and keep it friendly and informative."
                 )
-            else:
-                reply = "Sorry, I couldn't find any info for that provider."
 
-        # Step 3: Handle reviews category
+                gpt_response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": info_prompt}]
+                )
+
+                end = time.time()
+                return jsonify({
+                    'reply': gpt_response.choices[0].message.content.strip(),
+                    'category': 'info',
+                    'time': round(end - start, 2),
+                    'tokens': classification_response.usage.total_tokens + gpt_response.usage.total_tokens
+                })
+            else:
+                end = time.time()
+                return jsonify({
+                    'reply': "Sorry, I couldn't find any info for that provider.",
+                    'category': 'info',
+                    'time': round(end - start, 2),
+                    'tokens': classification_response.usage.total_tokens
+                })
+
         elif classification == "reviews":
             if REDDIT_DF is None:
-                reply = "Sorry, reviews are currently unavailable."
+                return jsonify({
+                    'reply': "Sorry, reviews are currently unavailable.",
+                    'category': 'reviews',
+                    'time': round(time.time() - start, 2),
+                    'tokens': classification_response.usage.total_tokens
+                })
+            matched = None
+            for provider in REDDIT_DF["website"].unique():
+                if provider.lower() in prompt.lower():
+                    matched = provider
+                    break
+
+            if matched:
+                filtered = REDDIT_DF[REDDIT_DF["website"].str.lower() == matched.lower()]
+                top_reviews = filtered.sort_values("score", ascending=False).head(5)
+                prompt_text = "Summarize the following reviews:\n" + "\n".join(f"- {t}" for t in top_reviews["text"])
+
+                review_start = time.time()
+                summary_response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": prompt_text}]
+                )
+                review_end = time.time()
+
+                return jsonify({
+                    'reply': summary_response.choices[0].message.content.strip(),
+                    'category': 'reviews',
+                    'time': round(review_end - start, 2),
+                    'tokens': classification_response.usage.total_tokens + summary_response.usage.total_tokens
+                })
             else:
-                matched = None
-                for provider in REDDIT_DF["website"].unique():
-                    if provider.lower() in prompt.lower():
-                        matched = provider
-                        break
+                return jsonify({
+                    'reply': "Sorry, I couldn't find reviews for that provider.",
+                    'category': 'reviews',
+                    'time': round(time.time() - start, 2),
+                    'tokens': classification_response.usage.total_tokens
+                })
 
-                if matched:
-                    filtered = REDDIT_DF[REDDIT_DF["website"].str.lower() == matched.lower()]
-                    top_reviews = filtered.sort_values("score", ascending=False).head(5)
-                    prompt_text = "Summarize the following reviews:\n" + "\n".join(f"- {t}" for t in top_reviews["text"])
-
-                    summary_response = client.chat.completions.create(
-                        model="gpt-4o-mini",
-                        messages=[{"role": "user", "content": prompt_text}]
-                    )
-                    reply = summary_response.choices[0].message.content.strip()
-                else:
-                    reply = "Sorry, I couldn't find reviews for that provider."
-
-        # Step 4: Handle unknown category
         elif classification == "unknown":
             fallback_prompt = (
                 f"The user said: '{prompt}'\n\n"
@@ -109,21 +154,30 @@ def chat():
                 "Do not give clinical advice."
             )
 
+            unknown_start = time.time()
             fallback_response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": fallback_prompt}]
             )
-            reply = fallback_response.choices[0].message.content.strip()
+            unknown_end = time.time()
 
-        # Fallback in case something goes wrong
+            return jsonify({
+                'reply': fallback_response.choices[0].message.content.strip(),
+                'category': 'unknown',
+                'time': round(unknown_end - start, 2),
+                'tokens': classification_response.usage.total_tokens + fallback_response.usage.total_tokens
+            })
+
         else:
-            classification = "unknown"
-            reply = "Sorry, I couldn't process your request."
-
-        return jsonify({'reply': reply, 'category': classification})
+            return jsonify({
+                'reply': "Sorry, I couldn't process your request.",
+                'category': 'unknown',
+                'time': round(time.time() - start, 2),
+                'tokens': classification_response.usage.total_tokens
+            })
 
     except Exception as e:
-        return jsonify({'reply': f"Error: {str(e)}", 'category': None}), 500
+        return jsonify({'reply': f"Error: {str(e)}", 'category': None, 'time': 0, 'tokens': 0}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
